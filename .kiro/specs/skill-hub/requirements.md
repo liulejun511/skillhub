@@ -7,7 +7,7 @@
 **关键定位（由前期讨论锁定）**：
 
 - **骑 Claude Code 原生 plugin marketplace 做分发**（`.claude-plugin/marketplace.json` + `/plugin marketplace add`），**不重造 npm/分发体系**。
-- **技能由人手写**，不做 AI 自动提炼——自动提炼（distill/evolve/triage/cycle/garden 自动合并/素材连接器/「自演变」叙事）经验证价值低，**明确砍掉**。
+- **技能由人策展、可借 AI 起草**——砍掉的是**无监督批量自动提炼**（distill/evolve/triage/cycle/garden 自动合并/素材连接器/「自演变」叙事，经验证价值低），不是「AI 参与」本身；判好坏看**人工背书 + 真实用量 + 评审**，不看「是不是人逐字敲的」。
 - **北极星是公开**（给所有程序员用），但**第一个里程碑是团队规模的核心**：团队的真实 skill + 真实用量 = 公开版的种子与证明。设计从第一天就「为公开而生」。
 - **复用** 旧仓 `memoket-skills` 已验证的：用量/触发统计、`SKILL.md` 格式 + 校验、脱敏闸（redaction）、安装隔离（quarantine）、质量评审范式（quality-review）。
 
