@@ -41,7 +41,8 @@
     },
     "origin": {
       "type": "string",
-      "enum": ["distilled", "authored", "installed"]
+      "description": "血统标注。authored=人工撰写/策展（可借 AI 起草）；ai-drafted-then-curated=AI 起草后经人工策展 + 质量评审；distilled=无监督自动提炼（旧路径，价值低）；installed=自外部引入。",
+      "enum": ["authored", "ai-drafted-then-curated", "distilled", "installed"]
     },
     "status": {
       "type": "string",

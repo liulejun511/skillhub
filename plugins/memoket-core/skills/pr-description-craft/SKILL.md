@@ -8,7 +8,7 @@ description: >-
 version: 0.1.0
 format_version: 1
 status: draft
-origin: distilled
+origin: ai-drafted-then-curated
 author: liulejun
 tags: [code-review, change-hygiene, communication, strength]
 ---
