@@ -1,0 +1,3 @@
+# skillhub 工具运行时依赖（CI 与本地一致）。
+PyYAML>=6
+jsonschema>=4

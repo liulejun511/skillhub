@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skillhub.dev/schemas/marketplace.schema.json",
+  "title": "Claude Code marketplace.json（skillhub 校验子集）",
+  "description": "校验 catalog 的必要骨架；Claude Code 可能新增字段，故 additionalProperties 放行。",
+  "type": "object",
+  "required": ["name", "owner", "plugins"],
+  "additionalProperties": true,
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": {
+      "type": "string",
+      "description": "marketplace 名（add/install 时可见，承载 curated/sandbox 层级信号）",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "owner": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "email": { "type": "string" }
+      }
+    },
+    "description": { "type": "string" },
+    "version": { "type": "string" },
+    "metadata": { "type": "object" },
+    "plugins": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/plugin" }
+    }
+  },
+  "$defs": {
+    "plugin": {
+      "type": "object",
+      "required": ["name", "source"],
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "source": {
+          "description": "相对路径字符串，或 {source: github|url|git-subdir|npm, ...} 对象",
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            {
+              "type": "object",
+              "required": ["source"],
+              "additionalProperties": true,
+              "properties": {
+                "source": { "type": "string", "enum": ["github", "url", "git-subdir", "npm"] },
+                "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+              }
+            }
+          ]
+        },
+        "description": { "type": "string" },
+        "version": { "type": "string" },
+        "category": { "type": "string" }
+      }
+    }
+  }
+}

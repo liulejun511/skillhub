@@ -100,28 +100,27 @@ def record_surface(skill_dir: Path, when: str) -> Dict:
 
 
 def archive_skill(name: str, root: Optional[Path] = None) -> Path:
-    """把技能移入 vault/archive/（无删除）。从 mine 或 installed 查找。"""
-    for base in (paths.vault_mine(root), paths.vault_installed(root)):
-        src = base / name
-        if (src / "SKILL.md").exists():
-            dst = paths.vault_archive(root) / name
-            if dst.exists():
-                raise ConflictError(f"archive 中已有同名: {name}")
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            shutil.move(str(src), str(dst))
-            rec = get_evolution(dst)
-            rec["lifecycle"] = "archived"
-            save_evolution(dst, rec)
-            return dst
+    """把技能移入 .archive/（无删除）。从活跃技能树查找。"""
+    src = paths.find_skill(name, root)
+    if src is not None and (src / "SKILL.md").exists():
+        dst = paths.archive_dir(root) / name
+        if dst.exists():
+            raise ConflictError(f"archive 中已有同名: {name}")
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(src), str(dst))
+        rec = get_evolution(dst)
+        rec["lifecycle"] = "archived"
+        save_evolution(dst, rec)
+        return dst
     raise MemoketError(f"找不到技能可归档: {name}")
 
 
 def restore_skill(name: str, root: Optional[Path] = None) -> Path:
-    """从 archive 恢复到 vault/mine/。"""
-    src = paths.vault_archive(root) / name
+    """从 .archive 恢复到 sandbox/skills/。"""
+    src = paths.archive_dir(root) / name
     if not (src / "SKILL.md").exists():
         raise MemoketError(f"archive 中无此技能: {name}")
-    dst = paths.vault_mine(root) / name
+    dst = paths.sandbox_skills(root) / name
     if dst.exists():
         raise ConflictError(f"vault/mine 已有同名: {name}")
     dst.parent.mkdir(parents=True, exist_ok=True)

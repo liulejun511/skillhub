@@ -33,7 +33,7 @@ def _migrate_frontmatter(fm: dict, from_version: int) -> dict:
 def migrate_all(root: Optional[Path] = None) -> List[str]:
     """迁移 vault 下所有技能，返回被迁移的技能名列表。"""
     migrated: List[str] = []
-    for base in (paths.vault_mine(root), paths.vault_installed(root), paths.vault_archive(root)):
+    for base in paths.skill_roots(root) + [paths.archive_dir(root)]:
         if not base.exists():
             continue
         for md in sorted(base.rglob(SKILL_ENTRY)):

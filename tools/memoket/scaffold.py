@@ -42,8 +42,8 @@ def _title_from_name(name: str) -> str:
 
 
 def new_skill(name: str, root: Optional[Path] = None) -> Path:
-    """在 vault/mine/<name>/ 生成空技能；已存在则抛 ConflictError。"""
-    target_dir = paths.vault_mine(root) / name
+    """在 sandbox/skills/<name>/ 生成空技能；已存在则抛 ConflictError。"""
+    target_dir = paths.sandbox_skills(root) / name
     skill_md = target_dir / "SKILL.md"
     if skill_md.exists():
         raise ConflictError(f"技能已存在，未覆盖: {skill_md}")

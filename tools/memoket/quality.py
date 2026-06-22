@@ -68,8 +68,11 @@ def save_quality(skill_dir: Path, reusable: int, actionable: int, boundary: int,
 
 
 def _mine_dirs(root: Optional[Path]) -> List[Path]:
-    base = paths.vault_mine(root)
-    return sorted(md.parent for md in base.rglob(SKILL_ENTRY)) if base.exists() else []
+    dirs: List[Path] = []
+    for base in paths.skill_roots(root):
+        if base.exists():
+            dirs.extend(md.parent for md in base.rglob(SKILL_ENTRY))
+    return sorted(dirs)
 
 
 def scores_path(root: Optional[Path] = None) -> Path:
@@ -112,8 +115,8 @@ def load_scores(path=None, root: Optional[Path] = None) -> int:
     data = json.loads(p.read_text(encoding="utf-8"))
     n = 0
     for name, q in data.items():
-        d = paths.vault_mine(root) / name
-        if not (d / SKILL_ENTRY).exists():
+        d = paths.find_skill(name, root)
+        if d is None:
             continue
         save_quality(d, int(q["reusable"]), int(q["actionable"]), int(q["boundary"]),
                      note=str(q.get("note", "")))
