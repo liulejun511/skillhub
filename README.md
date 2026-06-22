@@ -8,17 +8,23 @@ Write a Claude skill, contribute it via PR into the sandbox, let usage + quality
 
 ## Install (native Claude Code marketplace)
 
-```bash
-/plugin marketplace add liulejun511/skillhub      # once published to GitHub
-/plugin install memoket-core@skillhub             # curated, security-reviewed
+The repo is **public** — anyone can install it. Use the **HTTPS URL** form: the bare
+`owner/repo` shorthand makes Claude Code clone over SSH, which fails if you haven't trusted
+GitHub's SSH key.
 
-# the uncurated sandbox is a SEPARATE marketplace you opt into deliberately:
-/plugin install skillhub-sandbox@skillhub-sandbox # unreviewed — install at your own risk
+```bash
+/plugin marketplace add https://github.com/liulejun511/skillhub.git
+/plugin install memoket-core@skillhub      # curated, security-reviewed
+/reload-plugins                            # activate without a restart
 ```
 
-> Needs a recent Claude Code (team auto-install via `settings.json` has a known bug, [#32606](https://github.com/anthropics/claude-code/issues/32606)); if a plugin doesn't appear, fall back to the manual `add` + `install` above. See the spec's design doc for the version-gated specifics.
+Skills are **model-invoked** — they surface automatically by their "Use when …" triggers;
+you don't call them by name. Open a fresh chat and they kick in when relevant.
 
-Or, for a team, in `.claude/settings.json`:
+### For a team
+
+Check this into the repo's `.claude/settings.json` so members are prompted to install when
+they trust the folder:
 
 ```json
 {
@@ -28,6 +34,26 @@ Or, for a team, in `.claude/settings.json`:
   "enabledPlugins": { "memoket-core@skillhub": true }
 }
 ```
+
+> Needs a recent Claude Code. The auto-prompt flow has a known bug
+> ([#32606](https://github.com/anthropics/claude-code/issues/32606)); if a plugin doesn't
+> appear, fall back to the manual `add` + `install` above.
+
+### Sandbox (uncurated) — a separate marketplace
+
+The sandbox is a **separate** marketplace (`skillhub-sandbox`) you opt into deliberately;
+see [`sandbox/README.md`](sandbox/README.md) for how to add it.
+
+### Troubleshooting install
+
+- **`Host key verification failed` / SSH error** — the `owner/repo` shorthand clones over
+  SSH. Use the **HTTPS URL** above, or trust GitHub once with `ssh -T git@github.com`.
+- **`Connection was reset` / SSL errors** — your network (often a corporate proxy) is
+  intercepting TLS and resetting the plugin's clone. Either point Claude Code at a **local
+  clone** — `git clone https://github.com/liulejun511/skillhub.git`, then
+  `/plugin marketplace add <path-to-clone>` — or configure your corporate CA for git/curl.
+- **Desktop app** — the GUI can't add a *new* GitHub marketplace; run the `add` once in the
+  CLI (or use the `settings.json` above), then install from **+ → Plugins** and `/reload-plugins`.
 
 ## What's here
 
