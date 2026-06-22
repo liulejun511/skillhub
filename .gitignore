@@ -1,0 +1,25 @@
+# ── 隐私 / 本地运行态 ──
+.work/
+inbox/
+*.transcript
+watermark.json
+trigger-snapshot.json
+quality-scores.json
+.memoket.env.ps1
+.memoket.env
+eval/score.json
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# ── OS / editor ──
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

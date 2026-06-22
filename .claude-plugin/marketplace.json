@@ -1,0 +1,24 @@
+{
+  "name": "skillhub",
+  "owner": {
+    "name": "liulejun",
+    "email": "lejun.liu@memoket.ai"
+  },
+  "description": "A community skill hub for Claude — human-authored, usage-ranked, security-reviewed skills. Install curated skills, or contribute your own via PR.",
+  "version": "0.1.0",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "memoket-core",
+      "source": "./plugins/memoket-core",
+      "description": "Curated engineering-discipline skills: PR description craft, psql field diagnostics, evidence-first verification.",
+      "version": "0.1.0",
+      "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
+      "category": "engineering",
+      "keywords": ["engineering", "debugging", "code-review", "discipline"],
+      "strict": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "memoket-core",
+  "version": "0.1.0",
+  "description": "Curated engineering-discipline skills, seeded from human-written, independently quality-reviewed work.",
+  "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
+  "keywords": ["engineering", "debugging", "code-review", "verification"]
+}

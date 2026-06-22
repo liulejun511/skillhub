@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://memoket.dev/schemas/skill.schema.json",
+  "title": "memoket SKILL.md frontmatter",
+  "description": "通用、可移植的技能格式（运行时无关）。运行时专属字段一律落在 adapters.<name>.* 命名空间。",
+  "type": "object",
+  "required": ["name", "description", "version"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "kebab-case，全库唯一键",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "description": {
+      "type": "string",
+      "description": "一句话，应含触发场景（Use when ...）。触发场景的存在性由 validate_universal 检查。",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "version": {
+      "type": "string",
+      "description": "语义化版本 MAJOR.MINOR.PATCH",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "format_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "技能遵循的格式契约版本，供迁移 runner 使用"
+    },
+    "author": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "origin": {
+      "type": "string",
+      "enum": ["distilled", "authored", "installed"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "deprecated", "archived"]
+    },
+    "locales": {
+      "type": "object",
+      "description": "键为任意语言码（不写死 en/zh）",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string" },
+          "sync": { "type": "string", "enum": ["fresh", "stale"] }
+        },
+        "additionalProperties": true
+      }
+    },
+    "adapters": {
+      "type": "object",
+      "description": "运行时适配器扩展字段命名空间；每个适配器自定义其结构。",
+      "additionalProperties": true
+    }
+  }
+}
