@@ -1,0 +1,39 @@
+name: skillhub CI
+
+# sandbox PR 的自动闸（fail-closed）：结构校验 + 脱敏/注入扫 + 能力分级 + 单测 + marketplace 校验。
+# 任一步非零 = CI 红 = 不可合入。sandbox 技能装得到但标「未审」，晋级需人工策展合入。
+
+on:
+  pull_request:
+    paths: ['plugins/**', 'sandbox/**', 'tools/**', '.claude-plugin/**']
+  push:
+    branches: [main]
+    paths: ['plugins/**', 'sandbox/**', 'tools/**', '.claude-plugin/**']
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: tools
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install -r tools/requirements.txt pytest
+
+      - name: Unit tests (validate / scanners / classifier / CI gate)
+        run: python -m pytest tools/tests -q
+
+      - name: Contribution gate (L0 + L1 + capability, fail-closed)
+        run: python -m memoket gate
+
+      - name: Validate marketplace catalogs
+        run: |
+          python -m memoket marketplace-check .claude-plugin/marketplace.json
+          if [ -f sandbox/.claude-plugin/marketplace.json ]; then
+            python -m memoket marketplace-check sandbox/.claude-plugin/marketplace.json
+          fi
