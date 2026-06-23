@@ -185,6 +185,24 @@ def cmd_promote(args) -> int:
     return 0
 
 
+def cmd_submit(args) -> int:
+    from memoket.submit import submit_skill
+
+    r = submit_skill(args.name)
+    rep = r["report"]
+    print(f"已放入 sandbox: {r['dst']}")
+    for w in rep["warns"]:
+        print(f"  ⚠ {w}（warn，人审时看）")
+    if rep["ok"]:
+        print("✓ 过闸通过，可以投稿了。下一步：")
+        print('  git add sandbox/ && git commit -m "add skill" && git push  → 再开 PR（自己的仓直接 push 即可）')
+        return 0
+    print("✗ 过闸未过，先修这些再投：")
+    for b in rep["blocks"]:
+        print(f"    - {b}")
+    return 1
+
+
 def cmd_catalog(args) -> int:
     from memoket.catalog import write_catalog
 
@@ -220,6 +238,7 @@ _IMPLEMENTED = {
     "gate": cmd_gate,
     "marketplace-check": cmd_marketplace_check,
     "promote": cmd_promote,
+    "submit": cmd_submit,
     "catalog": cmd_catalog,
     "archive": cmd_archive,
     "restore": cmd_restore,
@@ -268,6 +287,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_prom.add_argument("name", help="sandbox 技能名")
     p_prom.add_argument("--sha", required=True, help="curated 源要钉的 40 位 commit SHA")
     p_prom.add_argument("--repo", required=True, help="github 源 owner/repo，如 liulejun511/skillhub")
+
+    p_sub = sub.add_parser("submit", help="一键投稿：把现成技能放进 sandbox 并过闸")
+    p_sub.add_argument("name", help="技能名（~/.claude/skills/ 下）或技能目录路径")
 
     sub.add_parser("catalog", help="生成 CATALOG.md（所有技能描述一页浏览）")
 

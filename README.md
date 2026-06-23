@@ -78,6 +78,10 @@ tools/tests/                      test suite — offline: PYTHONPATH=tools pytho
 .kiro/specs/skill-hub/            the spec (requirements / design / tasks)
 ```
 
+## Contribute a skill
+
+人人可投稿,挑简单的:**GitHub 网页** Fork → 加 `sandbox/skills/<name>/SKILL.md` → 开 PR(CI 自动检查);或**本地一条命令** `PYTHONPATH=tools python -m memoket submit <name>`。详见 **[CONTRIBUTING.md](CONTRIBUTING.md)**。
+
 ## Principles
 
 - **Ride native distribution** — Claude Code's own plugin marketplace; no reinvented registry.
