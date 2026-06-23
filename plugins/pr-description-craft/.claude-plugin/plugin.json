@@ -1,0 +1,7 @@
+{
+  "name": "pr-description-craft",
+  "version": "0.1.0",
+  "description": "写/审 PR 时强制「为什么改 / 改了什么 / 怎么验证」三段式，让 reviewer 不看代码就能判断要不要细看、从哪看起。Enforce a why/what/how-verified PR description so reviewers can judge a change without reading the diff.",
+  "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
+  "keywords": ["code-review", "pull-request", "communication"]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "evidence-before-adoption",
+  "version": "0.2.0",
+  "description": "接受一个改动/性能主张/自动化汇报前，先要真实数据证据（EXPLAIN/计时/复现），并审「谁做了什么」。Demand real evidence before accepting a change, perf claim, or automation report.",
+  "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
+  "keywords": ["verification", "performance", "discipline"]
+}

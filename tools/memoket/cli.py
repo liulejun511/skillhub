@@ -179,9 +179,17 @@ def cmd_marketplace_check(args) -> int:
 def cmd_promote(args) -> int:
     from memoket.promote import promote_skill
 
-    r = promote_skill(args.name, args.sha, repo=args.repo, plugin=args.plugin)
-    print(f"已晋级 {r['skill']} → {r['moved_to']}（status=active；{r['plugin']} 源钉 SHA {r['sha'][:12]}…）")
+    r = promote_skill(args.name, args.sha, repo=args.repo)
+    print(f"已晋级 {r['skill']} → 独立插件 {r['plugin_dir']}（status=active；源钉 SHA {r['sha'][:12]}…）")
     print("这只是改了工作区；请提一个晋级 PR 并由维护者人工 review 后合入（绝不自动晋级）。")
+    return 0
+
+
+def cmd_catalog(args) -> int:
+    from memoket.catalog import write_catalog
+
+    out = write_catalog()
+    print(f"已生成技能目录: {out}")
     return 0
 
 
@@ -212,6 +220,7 @@ _IMPLEMENTED = {
     "gate": cmd_gate,
     "marketplace-check": cmd_marketplace_check,
     "promote": cmd_promote,
+    "catalog": cmd_catalog,
     "archive": cmd_archive,
     "restore": cmd_restore,
 }
@@ -255,11 +264,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_mc = sub.add_parser("marketplace-check", help="校验 marketplace.json 结构")
     p_mc.add_argument("path", nargs="+", help="一个或多个 marketplace.json 路径")
 
-    p_prom = sub.add_parser("promote", help="晋级 sandbox 技能进 curated（移树 + 置 active + 源钉 SHA）")
+    p_prom = sub.add_parser("promote", help="晋级 sandbox 技能成 curated 独立插件（移树 + 置 active + 源钉 SHA）")
     p_prom.add_argument("name", help="sandbox 技能名")
     p_prom.add_argument("--sha", required=True, help="curated 源要钉的 40 位 commit SHA")
     p_prom.add_argument("--repo", required=True, help="github 源 owner/repo，如 liulejun511/skillhub")
-    p_prom.add_argument("--plugin", default="memoket-core", help="目标 curated 插件（默认 memoket-core）")
+
+    sub.add_parser("catalog", help="生成 CATALOG.md（所有技能描述一页浏览）")
 
     p_arch = sub.add_parser("archive", help="归档技能（不删除，可恢复）")
     p_arch.add_argument("name", help="技能名")

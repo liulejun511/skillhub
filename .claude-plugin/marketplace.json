@@ -4,21 +4,35 @@
     "name": "liulejun",
     "email": "lejun.liu@memoket.ai"
   },
-  "description": "A community skill hub for Claude — human-authored, usage-ranked, security-reviewed skills. Install curated skills, or contribute your own via PR.",
-  "version": "0.1.0",
-  "metadata": {
-    "pluginRoot": "./plugins"
-  },
+  "description": "A community skill hub for Claude — human-curated, usage-ranked, security-reviewed skills. Each skill is its own plugin: install only the ones you want, browse their descriptions before installing, uninstall any independently.",
+  "version": "0.2.0",
   "plugins": [
     {
-      "name": "memoket-core",
-      "source": "./plugins/memoket-core",
-      "description": "Curated engineering-discipline skills: PR description craft, psql field diagnostics, evidence-first verification.",
+      "name": "pr-description-craft",
+      "source": "./plugins/pr-description-craft",
+      "description": "写/审 PR 时强制「为什么改/改了什么/怎么验证」三段式。Enforce a why/what/how-verified PR description.",
       "version": "0.1.0",
       "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
       "category": "engineering",
-      "keywords": ["engineering", "debugging", "code-review", "discipline"],
-      "strict": true
+      "keywords": ["code-review", "pull-request", "communication"]
+    },
+    {
+      "name": "psql-field-diagnostics",
+      "source": "./plugins/psql-field-diagnostics",
+      "description": "在 psql 里手查 PostgreSQL 数据/性能问题的现场工具箱。A field toolbox for hand-debugging Postgres in psql.",
+      "version": "0.1.0",
+      "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
+      "category": "engineering",
+      "keywords": ["postgresql", "sql", "debugging"]
+    },
+    {
+      "name": "evidence-before-adoption",
+      "source": "./plugins/evidence-before-adoption",
+      "description": "接受改动/性能主张/汇报前先要真实证据。Demand real evidence before adopting a change or trusting a report.",
+      "version": "0.2.0",
+      "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
+      "category": "engineering",
+      "keywords": ["verification", "performance", "discipline"]
     }
   ]
 }

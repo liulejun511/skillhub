@@ -1,0 +1,7 @@
+{
+  "name": "psql-field-diagnostics",
+  "version": "0.1.0",
+  "description": "在 psql 里手工排查 PostgreSQL 数据/性能问题的现场工具箱：类型错指纹、ILIKE 慢查、读 EXPLAIN、只读安全。A field toolbox for hand-debugging PostgreSQL data/perf issues in psql.",
+  "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
+  "keywords": ["postgresql", "sql", "debugging"]
+}

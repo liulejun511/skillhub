@@ -1,11 +1,11 @@
-"""晋级 helper：把 sandbox 技能移入 curated、置 active、curated 源钉 SHA、仍 schema 合法。"""
+"""晋级 helper：把 sandbox 技能晋级成 curated 独立插件——建插件树 + plugin.json + 置 active +
+marketplace 追加 github/SHA 条目，且 catalog 仍 schema 合法。"""
 import json
 import shutil
 import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 
-from memoket import paths
 from memoket.marketplace import iter_marketplace_errors
 from memoket.promote import promote_skill
 from memoket.skill import parse_skill
@@ -19,6 +19,7 @@ description: Use when testing promotion (fixture)
 version: 0.1.0
 status: draft
 origin: authored
+tags: [test, fixture]
 ---
 
 # Foo
@@ -29,7 +30,7 @@ Body.
 _CATALOG = {
     "name": "skillhub",
     "owner": {"name": "x", "email": "x@example.com"},
-    "plugins": [{"name": "memoket-core", "source": "./plugins/memoket-core", "version": "0.1.0"}],
+    "plugins": [],
 }
 
 
@@ -37,9 +38,9 @@ _CATALOG = {
 def _workspace():
     root = Path(tempfile.mkdtemp())
     try:
-        (root / "sandbox" / "skills" / "foo").mkdir(parents=True)
-        (root / "sandbox" / "skills" / "foo" / "SKILL.md").write_text(_SKILL, encoding="utf-8")
-        (root / "plugins" / "memoket-core").mkdir(parents=True)
+        skill_dir = root / "sandbox" / "skills" / "foo"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(_SKILL, encoding="utf-8")
         (root / ".claude-plugin").mkdir(parents=True)
         (root / ".claude-plugin" / "marketplace.json").write_text(
             json.dumps(_CATALOG, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -48,21 +49,28 @@ def _workspace():
         shutil.rmtree(root, ignore_errors=True)
 
 
-def test_promote_moves_sets_active_and_pins_sha():
+def test_promote_creates_standalone_plugin():
     with _workspace() as root:
         result = promote_skill("foo", _SHA, repo="liulejun511/skillhub", root=root)
 
-        moved = root / "plugins" / "memoket-core" / "skills" / "foo"
-        assert moved.exists() and (moved / "SKILL.md").exists()
-        assert not (root / "sandbox" / "skills" / "foo").exists()  # 已移走
-        assert result["sha"] == _SHA
+        # 移进独立插件树
+        plugin = root / "plugins" / "foo"
+        skill_md = plugin / "skills" / "foo" / "SKILL.md"
+        assert skill_md.exists(), "技能未移入 plugins/foo/skills/foo/"
+        assert not (root / "sandbox" / "skills" / "foo").exists(), "sandbox 源未移走"
+        assert result["plugin_dir"].endswith("foo")
 
-        # 置 active
-        assert parse_skill(moved).frontmatter["status"] == "active"
+        # 插件 manifest 带描述(浏览器装前可视化)
+        manifest = json.loads((plugin / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+        assert manifest["name"] == "foo"
+        assert manifest["description"]
 
-        # curated 源钉 github + SHA，且 catalog 仍 schema 合法
+        # status 置 active
+        assert parse_skill(skill_md.parent).frontmatter["status"] == "active"
+
+        # marketplace 追加 github+SHA 条目，且仍 schema 合法
         catalog = json.loads((root / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-        entry = next(p for p in catalog["plugins"] if p["name"] == "memoket-core")
+        entry = next(p for p in catalog["plugins"] if p["name"] == "foo")
         assert entry["source"] == {"source": "github", "repo": "liulejun511/skillhub", "sha": _SHA}
         assert iter_marketplace_errors(catalog) == []
 
@@ -81,5 +89,15 @@ def test_promote_missing_skill_raises():
         try:
             promote_skill("nope", _SHA, repo="o/r", root=root)
             assert False, "应因找不到技能而抛错"
+        except Exception:
+            pass
+
+
+def test_promote_duplicate_plugin_raises():
+    with _workspace() as root:
+        (root / "plugins" / "foo").mkdir(parents=True)  # 已存在同名插件
+        try:
+            promote_skill("foo", _SHA, repo="o/r", root=root)
+            assert False, "应因 curated 已有同名插件而抛错"
         except Exception:
             pass
