@@ -1,103 +1,41 @@
 # skillhub
 
-**A community skill hub for Claude — human-curated, usage-ranked, security-reviewed.**
+A shared place to find and share **skills for Claude** — small, reusable instructions that make Claude better at one specific task (writing a PR, debugging SQL, and so on).
 
-Write a Claude skill, contribute it via PR into the sandbox, let usage + quality signals show what's actually good, and have it curated (with a security review) into the marketplace anyone can install.
+Each skill is its own plugin, so you **install only the ones you want**.
 
-> 🚧 Early scaffold. Full design under [`.kiro/specs/skill-hub/`](.kiro/specs/skill-hub/).
+## Install
 
-## Install (native Claude Code marketplace)
-
-The repo is **public** — anyone can install it. Use the **HTTPS URL** form: the bare
-`owner/repo` shorthand makes Claude Code clone over SSH, which fails if you haven't trusted
-GitHub's SSH key.
+In Claude Code:
 
 ```bash
 /plugin marketplace add https://github.com/liulejun511/skillhub.git
-
-# Each skill is its OWN plugin — install only the ones you want:
-/plugin install pr-description-craft@skillhub
-/plugin install psql-field-diagnostics@skillhub
-/plugin install evidence-before-adoption@skillhub
-/reload-plugins                            # activate without a restart
+/plugin install pr-description-craft@skillhub      # pick any skill from the list below
+/reload-plugins
 ```
 
-Browse what every skill does first in **[`CATALOG.md`](CATALOG.md)** (auto-generated), or in
-the plugin browser before installing — no need to take all of them. Skills are
-**model-invoked**: they surface automatically by their "Use when …" triggers; you don't call
-them by name. Uninstall any one independently with `/plugin uninstall <skill>@skillhub`.
+- Browse every skill and what it does in **[CATALOG.md](CATALOG.md)** — or just run `/plugin`, find **skillhub**, and pick from the list.
+- Once installed, a skill works on its own: Claude uses it automatically when it fits. You don't call it by name.
+- Remove any one anytime: `/plugin uninstall <skill>@skillhub`.
 
-### For a team
+## The skills
 
-Check this into the repo's `.claude/settings.json` so members are prompted to install when
-they trust the folder:
+| Skill | What it does |
+| --- | --- |
+| `pr-description-craft` | Write a PR description a reviewer can judge fast — why, what, how-tested |
+| `psql-field-diagnostics` | Debug PostgreSQL data and slow queries in `psql` |
+| `evidence-before-adoption` | Get real proof before trusting a change, perf claim, or report |
 
-```json
-{
-  "extraKnownMarketplaces": {
-    "skillhub": { "source": { "source": "github", "repo": "liulejun511/skillhub" } }
-  },
-  "enabledPlugins": { "pr-description-craft@skillhub": true, "evidence-before-adoption@skillhub": true }
-}
-```
+## Share your own skill
 
-> Needs a recent Claude Code. The auto-prompt flow has a known bug
-> ([#32606](https://github.com/anthropics/claude-code/issues/32606)); if a plugin doesn't
-> appear, fall back to the manual `add` + `install` above.
-
-### Sandbox (uncurated) — a separate marketplace
-
-The sandbox is a **separate** marketplace (`skillhub-sandbox`) you opt into deliberately;
-see [`sandbox/README.md`](sandbox/README.md) for how to add it.
-
-### Troubleshooting install
-
-- **`Host key verification failed` / SSH error** — the `owner/repo` shorthand clones over
-  SSH. Use the **HTTPS URL** above, or trust GitHub once with `ssh -T git@github.com`.
-- **`Connection was reset` / SSL errors** — your network (often a corporate proxy) is
-  intercepting TLS and resetting the plugin's clone. Either point Claude Code at a **local
-  clone** — `git clone https://github.com/liulejun511/skillhub.git`, then
-  `/plugin marketplace add <path-to-clone>` — or configure your corporate CA for git/curl.
-- **Desktop app** — the GUI can't add a *new* GitHub marketplace; run the `add` once in the
-  CLI (or use the `settings.json` above), then install from **+ → Plugins** and `/reload-plugins`.
-
-## What's here
-
-```
-.claude-plugin/marketplace.json   curated catalog (marketplace "skillhub")
-plugins/<skill>/                  ONE plugin per skill — install each independently
-  .claude-plugin/plugin.json        its browser-visible description (the "what does this do")
-  skills/<skill>/SKILL.md
-CATALOG.md                        auto-generated index of every skill — browse before installing
-sandbox/                          uncurated catalog (marketplace "skillhub-sandbox") — PR skills here
-.github/workflows/sandbox-ci.yml  fail-closed CI gate (validate + redaction/injection scan + capability)
-.github/pull_request_template.md  contribution + promotion checklist
-tools/memoket/                    authoring + CI tooling (validate, redaction, injection_scan,
-                                  classify, ci gate, marketplace check, promote, catalog)
-tools/tests/                      test suite — offline: PYTHONPATH=tools python tools/tests/run_all.py
-.kiro/specs/skill-hub/            the spec (requirements / design / tasks)
-```
-
-## Contribute a skill
-
-Got a habit, checklist, or hard-won lesson that makes you sharper? **Share it — one click, no fork, no setup:**
+One click — no fork, no setup:
 
 ### [➕ Add a skill →](https://github.com/liulejun511/skillhub/new/main?filename=sandbox/skills/my-skill/SKILL.md&value=---%0Aname%3A%20my-skill%0Adescription%3A%20Use%20when%20...%20%28one%20line%3A%20when%20should%20Claude%20reach%20for%20this%20skill%3F%29%0Aversion%3A%200.1.0%0A---%0A%0A%23%20My%20Skill%0A%0AWhat%20this%20skill%20makes%20Claude%20do%20%E2%80%94%20the%20judgment%20focus%2C%20rules%2C%20and%20the%20output%20shape.%0AKeep%20it%20instructions-only%20%28no%20scripts%20/%20code%29.%0A)
 
-That link opens GitHub's editor with the path **and a starter template already filled in**. Rename the
-`my-skill` folder, write your skill, hit **Propose changes** — GitHub forks the repo and opens a PR for
-you, and CI checks it automatically. No local setup, no git knowledge needed.
-
-Other ways in: fill in a [**Submit a skill** issue](https://github.com/liulejun511/skillhub/issues/new?template=submit-skill.yml) (just a form), or — repo cloned — run `PYTHONPATH=tools python -m memoket submit <name>`. Full guide → **[CONTRIBUTING.md](CONTRIBUTING.md)**.
-
-## Principles
-
-- **Ride native distribution** — Claude Code's own plugin marketplace; no reinvented registry.
-- **Human-curated, AI-assisted welcome** — what we reject is *unsupervised* bulk extraction, not AI help; a named author curates each skill, and usage + review decide what's good.
-- **Two axes** — popularity (stars/installs/dependents) vs quality (re-use/ratings/curation); don't collapse them.
-- **Security first** — Inert (instructions-only) vs Active (bundled code) split; layered review; never auto-promote.
-- **Team seed, built to open** — prove it with a team's real skills + usage, then open to everyone.
+It opens an editor with a starter template already filled in. Write your skill, click **Propose changes**, and the automatic checks run for you. Full guide: **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 ## License
 
-MIT (see LICENSE).
+MIT — see [LICENSE](LICENSE).
+
+<sub>How it works under the hood — sandbox → review → curated, with security checks: [`.kiro/specs/skill-hub/`](.kiro/specs/skill-hub/).</sub>
