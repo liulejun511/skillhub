@@ -47,6 +47,16 @@ python upload-skill.py <your-skill-name>   # opens a pre-filled PR in your brows
 
 It opens an editor with a starter template already filled in. Write your skill, click **Propose changes**, and the automatic checks run for you. Full guide: **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
+## See which skills you actually use
+
+`usage` counts how often each skill fired, read from your own local Claude Code transcripts (no telemetry, nothing leaves your machine):
+
+```bash
+PYTHONPATH=tools python -m memoket usage --days 7
+```
+
+You can schedule a daily report (optionally pushed to Feishu) — see [`.kiro/specs/skill-usage-analytics/`](.kiro/specs/skill-usage-analytics/design.md).
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

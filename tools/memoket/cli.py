@@ -211,6 +211,24 @@ def cmd_catalog(args) -> int:
     return 0
 
 
+def cmd_usage(args) -> int:
+    from memoket import usage
+
+    try:
+        known = usage.curated_skill_names()
+    except Exception:
+        known = None
+    text = usage.render_report(days=args.days, known_skills=known)
+    print(text)
+    if args.feishu:
+        from memoket.notify import notify_feishu
+
+        ok, detail = notify_feishu(text)
+        print(f"[feishu] {'sent' if ok else 'skipped'} — {detail}")
+        return 0 if ok else 1
+    return 0
+
+
 def cmd_archive(args) -> int:
     from memoket.lifecycle import archive_skill
 
@@ -240,6 +258,7 @@ _IMPLEMENTED = {
     "promote": cmd_promote,
     "submit": cmd_submit,
     "catalog": cmd_catalog,
+    "usage": cmd_usage,
     "archive": cmd_archive,
     "restore": cmd_restore,
 }
@@ -292,6 +311,10 @@ def build_parser() -> argparse.ArgumentParser:
     p_sub.add_argument("name", help="技能名（~/.claude/skills/ 下）或技能目录路径")
 
     sub.add_parser("catalog", help="生成 CATALOG.md（所有技能描述一页浏览）")
+
+    p_usage = sub.add_parser("usage", help="技能用量：扫本地 transcript，按天统计 Skill 触发次数")
+    p_usage.add_argument("--days", type=int, default=7, help="统计窗口天数（默认 7）")
+    p_usage.add_argument("--feishu", action="store_true", help="把报告推到飞书（需 FEISHU_* 环境变量）")
 
     p_arch = sub.add_parser("archive", help="归档技能（不删除，可恢复）")
     p_arch.add_argument("name", help="技能名")
