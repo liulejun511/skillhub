@@ -14,12 +14,18 @@ GitHub's SSH key.
 
 ```bash
 /plugin marketplace add https://github.com/liulejun511/skillhub.git
-/plugin install memoket-core@skillhub      # curated, security-reviewed
+
+# Each skill is its OWN plugin — install only the ones you want:
+/plugin install pr-description-craft@skillhub
+/plugin install psql-field-diagnostics@skillhub
+/plugin install evidence-before-adoption@skillhub
 /reload-plugins                            # activate without a restart
 ```
 
-Skills are **model-invoked** — they surface automatically by their "Use when …" triggers;
-you don't call them by name. Open a fresh chat and they kick in when relevant.
+Browse what every skill does first in **[`CATALOG.md`](CATALOG.md)** (auto-generated), or in
+the plugin browser before installing — no need to take all of them. Skills are
+**model-invoked**: they surface automatically by their "Use when …" triggers; you don't call
+them by name. Uninstall any one independently with `/plugin uninstall <skill>@skillhub`.
 
 ### For a team
 
@@ -31,7 +37,7 @@ they trust the folder:
   "extraKnownMarketplaces": {
     "skillhub": { "source": { "source": "github", "repo": "liulejun511/skillhub" } }
   },
-  "enabledPlugins": { "memoket-core@skillhub": true }
+  "enabledPlugins": { "pr-description-craft@skillhub": true, "evidence-before-adoption@skillhub": true }
 }
 ```
 
@@ -59,14 +65,15 @@ see [`sandbox/README.md`](sandbox/README.md) for how to add it.
 
 ```
 .claude-plugin/marketplace.json   curated catalog (marketplace "skillhub")
-plugins/memoket-core/skills/      curated seed skills (psql / pr-description / evidence)
+plugins/<skill>/                  ONE plugin per skill — install each independently
+  .claude-plugin/plugin.json        its browser-visible description (the "what does this do")
+  skills/<skill>/SKILL.md
+CATALOG.md                        auto-generated index of every skill — browse before installing
 sandbox/                          uncurated catalog (marketplace "skillhub-sandbox") — PR skills here
-  .claude-plugin/marketplace.json   separate marketplace name = the install-time "unreviewed" signal
-  skills/                           contributions land here (Inert-only in v1)
 .github/workflows/sandbox-ci.yml  fail-closed CI gate (validate + redaction/injection scan + capability)
 .github/pull_request_template.md  contribution + promotion checklist
 tools/memoket/                    authoring + CI tooling (validate, redaction, injection_scan,
-                                  classify, ci gate, marketplace check, promote)
+                                  classify, ci gate, marketplace check, promote, catalog)
 tools/tests/                      test suite — offline: PYTHONPATH=tools python tools/tests/run_all.py
 .kiro/specs/skill-hub/            the spec (requirements / design / tasks)
 ```

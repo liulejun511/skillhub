@@ -229,6 +229,24 @@ flowchart TD
 
 ---
 
+## 修订 (2026-06-22):per-skill 分发粒度 + 可视化目录
+
+**问题**:把多个技能塞进一个插件(`memoket-core` bundle),用户一装就全加载、关不掉单个——「skills 越多越好」是反模式。查实(claude-code-guide):Claude Code **原生没有 per-skill 开关**,enable/disable/卸载只在**插件**粒度。
+
+**决定**:**1 个技能 = 1 个插件**(curated 与 sandbox 都按此)。直接用原生能力满足用户诉求:
+- **按需选装**:每个技能独立插件,用户只装想要的;
+- **单独卸载**:`/plugin uninstall <skill>@skillhub`;
+- **描述可视化**:每个插件的 `plugin.json.description` 即浏览器装前可见的说明(bundle 模式下浏览器只显示 skill 名、看不到各自描述,这也是必须拆开的理由);
+- **上传自己的**:个人自用走原生 `~/.claude/skills/<name>/`(零市场);分享走 sandbox PR 流程。
+
+**配套**:
+- `promote` 改为「晋级 = 建独立插件 `plugins/<name>/` + 写 `plugin.json` + marketplace 追加 github/SHA 条目」(去掉 `--plugin` 参数)。
+- 新增 `catalog`(`memoket catalog` → `CATALOG.md`):扫所有技能的 name/description/tags,出一页可浏览清单,让人不进 Claude 也能挑。
+
+**代价**:marketplace 从 1 条 bundle 变「一技能一条目」(官方无数量上限),维护由 `promote` 自动化。
+
+---
+
 设计看起来可以吗?如果可以,我再生成实现任务。
 
-(几个我已替你拍板、可推翻的点:① 只留原生地基、memoket 降为 CI 工具;② v1 只收 Inert;③ 两层用两个 marketplace 名;④ 用量遥测做成自愿 opt-in、公开抓取推后。有不同意的直接说,我改。)
+(几个我已替你拍板、可推翻的点:① 只留原生地基、memoket 降为 CI 工具;② v1 只收 Inert;③ 两层用两个 marketplace 名;④ 用量遥测做成自愿 opt-in、公开抓取推后;⑤ per-skill 分发粒度 + catalog。有不同意的直接说,我改。)

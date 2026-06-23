@@ -1,6 +1,6 @@
 # Implementation Plan
 
-> **执行状态（2026-06-22）**：任务 1–7 + 8.1 已完成并验证（33/33 离线测试通过：脱敏白名单 5 / 注入扫描 8 / 能力分级 6 / CI 闸 6 / marketplace 校验 5 / 晋级 helper 3）。**仅 8.2（真机 `/plugin` 安装 + 团队 settings.json 实测）待你在目标 Claude Code 版本上手动验证。** 改动未提交，等你确认。
+> **执行状态（2026-06-22）**：任务 1–7 + 8.1 完成并验证；并按反馈把分发改为 **per-skill 粒度**（每技能一插件，用户按需选装/卸载/看描述）+ 加 `catalog` 生成器（见 design 末「修订」节）。**37/37 离线测试通过**（脱敏 5 / 注入 8 / 能力分级 6 / CI 闸 6 / marketplace 5 / 晋级 4 / catalog 3）。**仅 8.2（真机 `/plugin` 安装 + 团队 settings.json 实测）待你在目标 Claude Code 版本上手动验证。**
 
 > 原则：测试优先、每项独立可验、最小 diff。所有 pytest 经 **WSL + `D:\capsoul\CapsoulAI\.venv`** 跑（Windows 直跑无法 import）。被 prune 的模块连同其测试一起删，删后以「kept 集导入通过 + 其测试绿」为验收。
 
