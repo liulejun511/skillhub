@@ -28,7 +28,14 @@ In Claude Code:
 
 ## Share your own skill
 
-One click — no fork, no setup:
+**Already have a skill in `~/.claude/skills/`?** Upload it without copy-pasting:
+
+```bash
+curl -O https://raw.githubusercontent.com/liulejun511/skillhub/main/upload-skill.py
+python upload-skill.py <your-skill-name>   # opens a pre-filled PR in your browser
+```
+
+**Writing a new one?** One click — no fork, no setup:
 
 ### [➕ Add a skill →](https://github.com/liulejun511/skillhub/new/main?filename=sandbox/skills/my-skill/SKILL.md&value=---%0Aname%3A%20my-skill%0Adescription%3A%20Use%20when%20...%20%28one%20line%3A%20when%20should%20Claude%20reach%20for%20this%20skill%3F%29%0Aversion%3A%200.1.0%0A---%0A%0A%23%20My%20Skill%0A%0AWhat%20this%20skill%20makes%20Claude%20do%20%E2%80%94%20the%20judgment%20focus%2C%20rules%2C%20and%20the%20output%20shape.%0AKeep%20it%20instructions-only%20%28no%20scripts%20/%20code%29.%0A)
 
