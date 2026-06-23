@@ -16,9 +16,9 @@
     },
     "description": {
       "type": "string",
-      "description": "技能触发文本，应体现「何时该用」。Claude 原生技能的 description 通常较长（即触发面），故放宽长度。",
+      "description": "技能触发文本，应体现「何时该用」。Claude 在技能清单里约 1536 字截断 description（省 context），故上限 1536；但 description 每会话都吃 token，越短越好，建议一两句话。",
       "minLength": 1,
-      "maxLength": 4096
+      "maxLength": 1536
     },
     "version": {
       "type": "string",

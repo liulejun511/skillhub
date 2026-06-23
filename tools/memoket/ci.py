@@ -58,6 +58,17 @@ def gate_skill(skill_dir) -> Dict:
     except Exception as exc:
         blocks.append(f"capability scanner_error: {exc!r}")
 
+    # 质量提醒（非阻断）：description 偏长。Claude 清单约 1536 字截断，且每会话都吃 context。
+    try:
+        from memoket.skill import parse_skill
+
+        desc = parse_skill(d).description or ""
+        if len(desc) > 1024:
+            warns.append(
+                f"description 偏长（{len(desc)} 字）；Claude 清单约 1536 字截断、每会话吃 context，建议精简到一两句")
+    except Exception:
+        pass
+
     return {"skill": str(d), "ok": not blocks, "blocks": blocks, "warns": warns}
 
 
