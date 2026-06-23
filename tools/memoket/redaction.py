@@ -29,9 +29,24 @@ _DEFAULT_URL_ALLOWLIST = {
 _HOST_RE = re.compile(r"https?://([^/\s:]+)", re.IGNORECASE)
 
 
+# 公开 noreply 邮箱白名单：技能里的 co-author/署名 trailer 不算 PII。
+# 可用 SKILLHUB_EMAIL_ALLOWLIST（逗号分隔，整地址或 @域名）追加。
+_DEFAULT_EMAIL_ALLOWLIST = {"noreply@anthropic.com", "noreply@github.com"}
+
+
 def _url_allowlist() -> set:
     extra = {h.strip().lower() for h in os.environ.get("SKILLHUB_URL_ALLOWLIST", "").split(",") if h.strip()}
     return _DEFAULT_URL_ALLOWLIST | extra
+
+
+def _email_allowlist() -> set:
+    extra = {e.strip().lower() for e in os.environ.get("SKILLHUB_EMAIL_ALLOWLIST", "").split(",") if e.strip()}
+    return _DEFAULT_EMAIL_ALLOWLIST | extra
+
+
+def _email_is_allowed(email: str) -> bool:
+    e = email.lower()
+    return any(e == a or (a.startswith("@") and e.endswith(a)) for a in _email_allowlist())
 
 
 def _url_is_allowed(url: str) -> bool:
@@ -50,6 +65,8 @@ def scan(text: str) -> List[Dict]:
         for kind, pat in _PATTERNS.items():
             for m in pat.finditer(line):
                 if kind == "url" and _url_is_allowed(m.group(0)):
+                    continue
+                if kind == "email" and _email_is_allowed(m.group(0)):
                     continue
                 findings.append({"type": kind, "match": m.group(0), "line": lineno})
     return findings

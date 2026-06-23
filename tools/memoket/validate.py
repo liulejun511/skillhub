@@ -15,13 +15,13 @@ from memoket.schema import iter_schema_errors
 from memoket.skill import SkillPackage, parse_skill
 
 # 触发场景标志词（en/zh）；description 至少含其一，体现「何时用」。
+# 放宽以接纳真实 Claude 技能的多样写法（Use this / whenever / Triggers on / 触发场景 等）。
 _TRIGGER_PATTERNS = [
-    r"\buse when\b",
-    r"\bwhen\b.+\b(to|for)\b",
-    r"用于",
-    r"何时",
-    r"当(你|需要|遇到)",
-    r"适用于",
+    r"\buse (when|this|it|for|to)\b",
+    r"\bwhen(ever)?\b",
+    r"\btriggers? (on|when|whenever)\b",
+    r"用于", r"用来", r"何时", r"该用", r"当(你|需要|遇到|你想|出现)",
+    r"适用于", r"适合", r"触发",
 ]
 _TRIGGER_RE = re.compile("|".join(_TRIGGER_PATTERNS), re.IGNORECASE)
 

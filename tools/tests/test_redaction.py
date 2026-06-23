@@ -45,3 +45,14 @@ def test_other_pii_still_flagged():
     findings = scan("contact john@example.com phone 138 0000 0000")
     types = {f["type"] for f in findings}
     assert "email" in types, findings
+
+
+def test_noreply_trailer_not_flagged():
+    findings = scan("Co-Authored-By: Claude <noreply@anthropic.com>")
+    assert not any(f["type"] == "email" for f in findings), findings
+
+
+def test_email_allowlist_env_domain():
+    with _env(SKILLHUB_EMAIL_ALLOWLIST="@mycorp.test"):
+        findings = scan("ping bot@mycorp.test")
+    assert not any(f["type"] == "email" for f in findings), findings

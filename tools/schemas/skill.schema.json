@@ -4,8 +4,8 @@
   "title": "memoket SKILL.md frontmatter",
   "description": "通用、可移植的技能格式（运行时无关）。运行时专属字段一律落在 adapters.<name>.* 命名空间。",
   "type": "object",
-  "required": ["name", "description", "version"],
-  "additionalProperties": false,
+  "required": ["name", "description"],
+  "additionalProperties": true,
   "properties": {
     "name": {
       "type": "string",
@@ -16,9 +16,9 @@
     },
     "description": {
       "type": "string",
-      "description": "一句话，应含触发场景（Use when ...）。触发场景的存在性由 validate_universal 检查。",
+      "description": "技能触发文本，应体现「何时该用」。Claude 原生技能的 description 通常较长（即触发面），故放宽长度。",
       "minLength": 1,
-      "maxLength": 500
+      "maxLength": 4096
     },
     "version": {
       "type": "string",
