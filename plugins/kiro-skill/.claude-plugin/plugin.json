@@ -1,0 +1,6 @@
+{
+  "name": "kiro-skill",
+  "version": "0.1.0",
+  "description": "Interactive spec-driven feature development workflow from idea to implementation. Use when the user mentions Kiro, K神, .kiro/specs, feature specs, requirements, EARS acceptance criteria, design documents, implementation plans, task lists, 需求文档, 设计文档, 实现计划, or executing a single task from a Kiro-style spec. Also use by default before writing business code or product feature code, including backend business logic, user-facing workflows, product behavior, domain rules, data model changes, API behavior changes, or frontend business flows, unless the user explicitly requests a small mechanical edit, test-only change, typo fix, formatting-only change, or direct hotfix without planning. Creates requirements.md, design.md, and tasks.md under .kiro/specs/{feature-name}/ with explicit approval between phases and one-task-at-a-time execution.",
+  "keywords": []
+}

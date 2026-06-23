@@ -1,13 +1,10 @@
 ---
 name: solve-at-the-right-layer
-description: >
-  动手优化 / 打补丁 / 加绕过之前的强制一问：我是在对的"层"解决吗？能"消除"问题
-  （改结构、换它发生的位置）而不是"缓解"它（把可能放错地方的活做得更快/更稳）吗？
-  触发场景：优化慢路径；加缓存 / 索引 / 重试 / 特殊 case / workaround；在同一处反复打补丁仍撞墙；
-  为"读时现算"提速；做"该把这个计算 / 状态放在哪一层"的取舍。
-  讨论 缓解 vs 消除 / mitigate vs eliminate / 在上游解决 / 换个层 / 改对地方 / 别在症状层打补丁 /
-  altitude / root cause layer / 预计算 / 物化 / 冗余字段 / counter cache。
-  配合 value-semantics-discipline（把值弄对）、code-change-guardrails（落地）、kiro-skill（规划）。
+description: 动手优化 / 打补丁 / 加绕过之前的强制一问：我是在对的"层"解决吗？能"消除"问题 （改结构、换它发生的位置）而不是"缓解"它（把可能放错地方的活做得更快/更稳）吗？
+  触发场景：优化慢路径；加缓存 / 索引 / 重试 / 特殊 case / workaround；在同一处反复打补丁仍撞墙； 为"读时现算"提速；做"该把这个计算
+  / 状态放在哪一层"的取舍。 讨论 缓解 vs 消除 / mitigate vs eliminate / 在上游解决 / 换个层 / 改对地方 / 别在症状层打补丁
+  / altitude / root cause layer / 预计算 / 物化 / 冗余字段 / counter cache。 配合 value-semantics-discipline（把值弄对）、code-change-guardrails（落地）、kiro-skill（规划）。
+status: active
 ---
 
 # 在正确的层次解决问题（Solve at the Right Layer）

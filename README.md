@@ -25,6 +25,10 @@ In Claude Code:
 | `pr-description-craft` | Write a PR description a reviewer can judge fast — why, what, how-tested |
 | `psql-field-diagnostics` | Debug PostgreSQL data and slow queries in `psql` |
 | `evidence-before-adoption` | Get real proof before trusting a change, perf claim, or report |
+| `commit-pr-conventions` | Conventional Commits + a skimmable PR-description format |
+| `kiro-skill` | Spec-driven workflow: requirements → design → tasks → execute |
+| `solve-at-the-right-layer` | Fix at the right layer — eliminate a problem, don't just mitigate it |
+| `value-semantics-discipline` | Make every value's implicit contract explicit (units, nulls, ordering) |
 
 ## Share your own skill
 
@@ -45,4 +49,4 @@ It opens an editor with a starter template already filled in. Write your skill, 
 
 MIT — see [LICENSE](LICENSE).
 
-<sub>How it works under the hood — sandbox → review → curated, with security checks: [`.kiro/specs/skill-hub/`](.kiro/specs/skill-hub/).</sub>
+<sub>How it works under the hood — a submission is a PR (not installable), reviewed, then promoted to the installable curated set; with automated security checks. Details: [`.kiro/specs/skill-hub/`](.kiro/specs/skill-hub/).</sub>

@@ -54,4 +54,4 @@ version: 0.1.0
 
 ## 合入之后
 
-技能先进 **sandbox**(`skillhub-sandbox`,未策展、可装但标「未审」)。好用的会经一个**人工策展的晋级 PR** 移进 curated 的 `skillhub`,人人可一键装。所有技能可在 [`CATALOG.md`](CATALOG.md) 一页浏览。
+投稿先以 PR 落到 `sandbox/skills/`(**暂存区,不可安装**),过 CI + 维护者审。**只有被收进 curated(`plugins/`)的才发布、才能一键装**——维护者用 `memoket promote <名>` 收进去。未审的停在 PR / 暂存,不对外发布。已发布技能可在 [`CATALOG.md`](CATALOG.md) 一页浏览。

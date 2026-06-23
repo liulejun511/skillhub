@@ -1,7 +1,0 @@
-{
-  "name": "skillhub-sandbox",
-  "version": "0.0.1",
-  "description": "[SANDBOX/UNREVIEWED] 社区投稿、未经策展的技能（仅 Inert）。过审后晋级进 curated。",
-  "author": { "name": "skillhub contributors" },
-  "keywords": ["sandbox", "unreviewed", "community"]
-}

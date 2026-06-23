@@ -61,8 +61,8 @@ def render(root: Optional[Path] = None) -> str:
                 out.append(tags)
             out.append("")
 
-    section("Curated（已策展，可安装）", curated)
-    section("Sandbox（未策展，自担风险）", sandbox)
+    section("Curated（已策展，可一键安装）", curated)
+    section("Pending submissions（暂存待审，未发布、不可装）", sandbox)
     return "\n".join(out) + "\n"
 
 

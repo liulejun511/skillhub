@@ -247,6 +247,17 @@ flowchart TD
 
 ---
 
+## 修订 (2026-06-22):砍掉公开 sandbox 层
+
+原设计两个具名 marketplace(curated `skillhub` + 公开可装的 `skillhub-sandbox`)。**砍掉后者**:
+- **不再有「公开可装的未审 sandbox 市场」**——未审技能不对外发布。
+- 投稿 = PR(合并前不可装)→ CI 闸 + 人工审 → `promote` 收进 curated(`plugins/`)→ 才发布、可一键装。
+- `sandbox/` 降级为纯**投稿暂存区**(`sandbox/skills/`,不可装),不再带 `.claude-plugin/marketplace.json`。
+- 理由:sandbox 当初是为「攒用量判断火不火」,但原生安装路径拿不到用量,其主要价值不成立;且「公开未审区」易堆垃圾、令人困惑。「只发布审过的」更简单、更符合预期。
+- 配套:`promote` 源默认改 **相对路径**(与种子一致),github+SHA 钉死降为可选(公开硬化时再用);schema 已放宽以接纳 Claude 原生技能格式(version 可选、description≤1536、额外字段放行)。
+
+R2「sandbox/marketplace 两区物理隔离」据此简化为「暂存(PR)→ 审 → curated 单一发布层」。
+
 设计看起来可以吗?如果可以,我再生成实现任务。
 
 (几个我已替你拍板、可推翻的点:① 只留原生地基、memoket 降为 CI 工具;② v1 只收 Inert;③ 两层用两个 marketplace 名;④ 用量遥测做成自愿 opt-in、公开抓取推后;⑤ per-skill 分发粒度 + catalog。有不同意的直接说,我改。)

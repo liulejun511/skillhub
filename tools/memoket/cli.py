@@ -179,9 +179,9 @@ def cmd_marketplace_check(args) -> int:
 def cmd_promote(args) -> int:
     from memoket.promote import promote_skill
 
-    r = promote_skill(args.name, args.sha, repo=args.repo)
-    print(f"已晋级 {r['skill']} → 独立插件 {r['plugin_dir']}（status=active；源钉 SHA {r['sha'][:12]}…）")
-    print("这只是改了工作区；请提一个晋级 PR 并由维护者人工 review 后合入（绝不自动晋级）。")
+    r = promote_skill(args.name, repo=args.repo, sha=args.sha)
+    print(f"已晋级 {r['skill']} → 独立插件 {r['plugin_dir']}（status=active；源 {r['source']}）")
+    print("这只是改了工作区；提交即可（自有仓直接 push，否则走 PR + 人工 review）。")
     return 0
 
 
@@ -283,10 +283,10 @@ def build_parser() -> argparse.ArgumentParser:
     p_mc = sub.add_parser("marketplace-check", help="校验 marketplace.json 结构")
     p_mc.add_argument("path", nargs="+", help="一个或多个 marketplace.json 路径")
 
-    p_prom = sub.add_parser("promote", help="晋级 sandbox 技能成 curated 独立插件（移树 + 置 active + 源钉 SHA）")
-    p_prom.add_argument("name", help="sandbox 技能名")
-    p_prom.add_argument("--sha", required=True, help="curated 源要钉的 40 位 commit SHA")
-    p_prom.add_argument("--repo", required=True, help="github 源 owner/repo，如 liulejun511/skillhub")
+    p_prom = sub.add_parser("promote", help="把暂存技能收成 curated 独立插件（移树 + 置 active + 加 marketplace 条目）")
+    p_prom.add_argument("name", help="暂存区 sandbox/skills 里的技能名")
+    p_prom.add_argument("--repo", help="可选：github 源 owner/repo（配 --sha 启用 SHA 钉死）")
+    p_prom.add_argument("--sha", help="可选：钉死的 40 位 commit SHA（需配 --repo）")
 
     p_sub = sub.add_parser("submit", help="一键投稿：把现成技能放进 sandbox 并过闸")
     p_sub.add_argument("name", help="技能名（~/.claude/skills/ 下）或技能目录路径")

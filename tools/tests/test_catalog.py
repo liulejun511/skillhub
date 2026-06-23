@@ -6,7 +6,7 @@ def test_render_lists_curated_seeds():
     text = catalog.render()
     for name in ("pr-description-craft", "psql-field-diagnostics", "evidence-before-adoption"):
         assert name in text, f"目录缺少 {name}"
-    assert "Curated" in text and "Sandbox" in text
+    assert "Curated" in text and "Pending" in text
 
 
 def test_collect_carries_description():

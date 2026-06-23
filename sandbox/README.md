@@ -1,23 +1,14 @@
-# skillhub-sandbox（未策展区）
+# sandbox/ — 投稿暂存区(不可安装)
 
-人人可 PR 投稿技能到这里。**它是一个独立的 marketplace（`skillhub-sandbox`），与已策展的 `skillhub` 物理隔离**——装的时候你会看见 `plugin@skillhub-sandbox`，与 `plugin@skillhub` 一眼可分。
+这里**不是一个可安装的 marketplace**。它只是**投稿暂存区**:投稿的技能先以 PR 的形式落到 `sandbox/skills/<name>/SKILL.md`,过 CI 闸、由维护者审。
 
-## 投稿一个技能
+**只有审过、被收进 curated(`plugins/`)的技能才会发布、才能被安装。** 暂存在这里的东西**装不了**——这是有意的:未审的不对外发布。
 
-1. 把技能放到 `sandbox/skills/<your-skill>/SKILL.md`（可带 `reference/` 文档，**不可带** `scripts/`、`hooks/`、`bin/`、MCP 等可执行组件——v1 沙盒**仅收 Inert/纯指令**）。
-2. 本地自查：
-   ```bash
-   PYTHONPATH=tools python -m memoket gate sandbox/skills/<your-skill>
-   ```
-3. 提 PR。CI 会跑结构校验 + 脱敏/注入扫 + 能力分级（fail-closed，红了不能合）。
+## 投稿流程
 
-## 风险提示
+1. 把技能加到 `sandbox/skills/<your-skill>/SKILL.md`(纯指令,无脚本/代码),提 PR。
+   - 最省事:用仓库 README 里的 **[➕ Add a skill]** 一键链接,或 `upload-skill.py`。
+2. CI 自动检查(结构 + 脱敏 + 注入扫 + 仅 Inert),结论贴 PR 上。
+3. 维护者审。够好 → 用 `memoket promote <name>` 收进 `plugins/`(curated)→ 发布、人人可装。
 
-沙盒技能**未经安全评审**。安装前请自行审阅 `SKILL.md`。好用且过审的会经一个**人工策展的晋级 PR**移入 curated 的 `skillhub`（届时源会钉到 commit SHA）。
-
-## 安装（自担风险）
-
-```bash
-/plugin marketplace add liulejun511/skillhub        # 注意：sandbox 是独立 marketplace
-/plugin install skillhub-sandbox@skillhub-sandbox
-```
+详见仓库根的 [CONTRIBUTING.md](../CONTRIBUTING.md)。

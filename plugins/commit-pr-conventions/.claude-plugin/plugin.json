@@ -1,0 +1,6 @@
+{
+  "name": "commit-pr-conventions",
+  "version": "0.1.0",
+  "description": "Project conventions for writing git commit messages and pull request descriptions. Use this whenever composing or rewriting a commit message, running `git commit`, squashing/rebasing commits before opening or updating a PR, or creating/editing a pull request or its description (via `gh`, the GitHub API, or the web UI). Apply it even when the user only says things like \"commit this\", \"push it\", \"open a PR\", \"update the PR\", \"clean up the commits\", or \"把这些提交合并一下\" without explicitly mentioning conventions.",
+  "keywords": []
+}

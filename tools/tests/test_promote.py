@@ -1,5 +1,5 @@
-"""晋级 helper：把 sandbox 技能晋级成 curated 独立插件——建插件树 + plugin.json + 置 active +
-marketplace 追加 github/SHA 条目，且 catalog 仍 schema 合法。"""
+"""晋级 helper：把暂存技能收成 curated 独立插件——建插件树 + plugin.json + 置 active +
+marketplace 追加条目(默认相对源;给 repo+sha 则 github 钉死),且 catalog 仍 schema 合法。"""
 import json
 import shutil
 import tempfile
@@ -27,11 +27,7 @@ tags: [test, fixture]
 Body.
 """
 
-_CATALOG = {
-    "name": "skillhub",
-    "owner": {"name": "x", "email": "x@example.com"},
-    "plugins": [],
-}
+_CATALOG = {"name": "skillhub", "owner": {"name": "x", "email": "x@example.com"}, "plugins": []}
 
 
 @contextmanager
@@ -49,36 +45,36 @@ def _workspace():
         shutil.rmtree(root, ignore_errors=True)
 
 
-def test_promote_creates_standalone_plugin():
+def _entry(root, name="foo"):
+    catalog = json.loads((root / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
+    return next(p for p in catalog["plugins"] if p["name"] == name), catalog
+
+
+def test_promote_relative_source_by_default():
     with _workspace() as root:
-        result = promote_skill("foo", _SHA, repo="liulejun511/skillhub", root=root)
-
-        # 移进独立插件树
-        plugin = root / "plugins" / "foo"
-        skill_md = plugin / "skills" / "foo" / "SKILL.md"
-        assert skill_md.exists(), "技能未移入 plugins/foo/skills/foo/"
-        assert not (root / "sandbox" / "skills" / "foo").exists(), "sandbox 源未移走"
-        assert result["plugin_dir"].endswith("foo")
-
-        # 插件 manifest 带描述(浏览器装前可视化)
-        manifest = json.loads((plugin / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
-        assert manifest["name"] == "foo"
-        assert manifest["description"]
-
-        # status 置 active
+        r = promote_skill("foo", root=root)
+        skill_md = root / "plugins" / "foo" / "skills" / "foo" / "SKILL.md"
+        assert skill_md.exists()
+        assert not (root / "sandbox" / "skills" / "foo").exists()
+        assert (root / "plugins" / "foo" / ".claude-plugin" / "plugin.json").exists()
         assert parse_skill(skill_md.parent).frontmatter["status"] == "active"
+        entry, catalog = _entry(root)
+        assert entry["source"] == "./plugins/foo"   # 默认相对源
+        assert iter_marketplace_errors(catalog) == []
 
-        # marketplace 追加 github+SHA 条目，且仍 schema 合法
-        catalog = json.loads((root / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-        entry = next(p for p in catalog["plugins"] if p["name"] == "foo")
+
+def test_promote_github_sha_when_given():
+    with _workspace() as root:
+        promote_skill("foo", root=root, repo="liulejun511/skillhub", sha=_SHA)
+        entry, catalog = _entry(root)
         assert entry["source"] == {"source": "github", "repo": "liulejun511/skillhub", "sha": _SHA}
         assert iter_marketplace_errors(catalog) == []
 
 
-def test_promote_rejects_bad_sha():
+def test_promote_bad_sha_raises():
     with _workspace() as root:
         try:
-            promote_skill("foo", "not-a-sha", repo="o/r", root=root)
+            promote_skill("foo", root=root, repo="o/r", sha="not-a-sha")
             assert False, "应因 SHA 非法而抛错"
         except Exception as exc:
             assert "SHA" in str(exc)
@@ -87,17 +83,17 @@ def test_promote_rejects_bad_sha():
 def test_promote_missing_skill_raises():
     with _workspace() as root:
         try:
-            promote_skill("nope", _SHA, repo="o/r", root=root)
-            assert False, "应因找不到技能而抛错"
+            promote_skill("nope", root=root)
+            assert False
         except Exception:
             pass
 
 
 def test_promote_duplicate_plugin_raises():
     with _workspace() as root:
-        (root / "plugins" / "foo").mkdir(parents=True)  # 已存在同名插件
+        (root / "plugins" / "foo").mkdir(parents=True)
         try:
-            promote_skill("foo", _SHA, repo="o/r", root=root)
-            assert False, "应因 curated 已有同名插件而抛错"
+            promote_skill("foo", root=root)
+            assert False
         except Exception:
             pass

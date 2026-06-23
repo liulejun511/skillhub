@@ -1,0 +1,6 @@
+{
+  "name": "value-semantics-discipline",
+  "version": "0.1.0",
+  "description": "General code-writing standard for eliminating ambiguity in the implicit contracts that every value and interface carries — meaning, unit, base/offset, range, nullability/absence, ordering, lifecycle, error behavior. Use when writing or changing ANY code: choosing a representation, default, or sentinel; deciding how to signal absent/empty/error; naming a variable or field; sorting or iterating; computing or storing a value others consume. Triggers on: 写代码, 写函数, 改逻辑, 接口设计, 字段设计, 默认值, 缺失, null, 哨兵, 边界, 下标, 起点, 单位, 顺序, 命名, 错误处理, 歧义, 契约, representation, default, sentinel, nullability, boundary, off-by-one, ordering, naming, contract, ambiguity, edge case. Core rule: surface every implicit contract and make it explicit, consistent end-to-end, and verified against consumers BEFORE writing — never let an approximation that merely \"runs\" stand in for a precise, unambiguous one.",
+  "keywords": []
+}
