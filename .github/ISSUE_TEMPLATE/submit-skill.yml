@@ -1,0 +1,53 @@
+name: ✨ Submit a skill
+description: Share a Claude skill — no git, no fork, just fill this in.
+title: "[skill] <your skill name>"
+labels: ["skill-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share a skill in ~2 minutes. A maintainer turns this into a PR and CI checks it.
+        Skills are **instructions-only** (no scripts/code). Prefer editing a file directly?
+        Use the **one-click link** in the README instead — it opens a pre-filled editor.
+  - type: input
+    id: name
+    attributes:
+      label: Skill name (kebab-case)
+      placeholder: e.g. changelog-entry-craft
+    validations:
+      required: true
+  - type: input
+    id: trigger
+    attributes:
+      label: When should Claude use it?  ("Use when …")
+      description: This one line is how the skill auto-surfaces. Be specific.
+      placeholder: Use when writing a changelog entry
+    validations:
+      required: true
+  - type: textarea
+    id: body
+    attributes:
+      label: The skill
+      description: What Claude should do — judgment focus, rules, the output shape. Instructions only.
+      render: markdown
+      placeholder: |
+        ## Judgment focus
+        - ...
+
+        ## Rules
+        - ...
+    validations:
+      required: true
+  - type: input
+    id: author
+    attributes:
+      label: Your name / handle (for attribution, optional)
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Quick confirm
+      options:
+        - label: Instructions-only — no scripts / hooks / MCP / executable code
+          required: true
+        - label: No secrets, real names, or internal-only info
+          required: true

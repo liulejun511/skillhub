@@ -80,7 +80,15 @@ tools/tests/                      test suite — offline: PYTHONPATH=tools pytho
 
 ## Contribute a skill
 
-人人可投稿,挑简单的:**GitHub 网页** Fork → 加 `sandbox/skills/<name>/SKILL.md` → 开 PR(CI 自动检查);或**本地一条命令** `PYTHONPATH=tools python -m memoket submit <name>`。详见 **[CONTRIBUTING.md](CONTRIBUTING.md)**。
+Got a habit, checklist, or hard-won lesson that makes you sharper? **Share it — one click, no fork, no setup:**
+
+### [➕ Add a skill →](https://github.com/liulejun511/skillhub/new/main?filename=sandbox/skills/my-skill/SKILL.md&value=---%0Aname%3A%20my-skill%0Adescription%3A%20Use%20when%20...%20%28one%20line%3A%20when%20should%20Claude%20reach%20for%20this%20skill%3F%29%0Aversion%3A%200.1.0%0A---%0A%0A%23%20My%20Skill%0A%0AWhat%20this%20skill%20makes%20Claude%20do%20%E2%80%94%20the%20judgment%20focus%2C%20rules%2C%20and%20the%20output%20shape.%0AKeep%20it%20instructions-only%20%28no%20scripts%20/%20code%29.%0A)
+
+That link opens GitHub's editor with the path **and a starter template already filled in**. Rename the
+`my-skill` folder, write your skill, hit **Propose changes** — GitHub forks the repo and opens a PR for
+you, and CI checks it automatically. No local setup, no git knowledge needed.
+
+Other ways in: fill in a [**Submit a skill** issue](https://github.com/liulejun511/skillhub/issues/new?template=submit-skill.yml) (just a form), or — repo cloned — run `PYTHONPATH=tools python -m memoket submit <name>`. Full guide → **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 ## Principles
 
