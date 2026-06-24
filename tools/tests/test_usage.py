@@ -72,3 +72,23 @@ def test_empty_when_no_transcripts():
     with _projects([]) as root:
         assert usage.counts_by_day(root) == {}
         assert "No skill invocations" in usage.render_report(root)
+
+
+def test_available_skill_names_user_and_plugins():
+    home = Path(tempfile.mkdtemp())
+    try:
+        # user-level skill
+        (home / ".claude" / "skills" / "foo").mkdir(parents=True)
+        (home / ".claude" / "skills" / "foo" / "SKILL.md").write_text("x", encoding="utf-8")
+        # installed plugin with a skill under its installPath
+        plug = home / ".claude" / "plugins" / "cache" / "mk" / "bar" / "0.1.0"
+        (plug / "skills" / "bar").mkdir(parents=True)
+        (plug / "skills" / "bar" / "SKILL.md").write_text("x", encoding="utf-8")
+        ip = home / ".claude" / "plugins" / "installed_plugins.json"
+        ip.write_text(json.dumps({"version": 2, "plugins": {"bar@mk": [{"installPath": str(plug)}]}}),
+                      encoding="utf-8")
+        assert usage.available_skill_names(home=home) == ["bar", "foo"]
+        # a curated-but-not-installed skill is NOT "available" → never falsely "unused"
+        assert "baz" not in usage.available_skill_names(home=home)
+    finally:
+        shutil.rmtree(home, ignore_errors=True)

@@ -96,7 +96,7 @@ def totals(by_day: Dict[str, Dict[str, int]]) -> Dict[str, int]:
 
 
 def curated_skill_names(root: Optional[Path] = None) -> List[str]:
-    """Names of curated (installable) skills, to flag installed-but-unused ones."""
+    """Names of curated (installable) skills in the marketplace tree."""
     from memoket import paths
     from memoket.skill import SKILL_ENTRY
 
@@ -104,6 +104,38 @@ def curated_skill_names(root: Optional[Path] = None) -> List[str]:
     if not curated.exists():
         return []
     return sorted({md.parent.name for md in curated.rglob(SKILL_ENTRY)})
+
+
+def available_skill_names(home: Optional[Path] = None) -> List[str]:
+    """Skills that COULD actually fire on THIS machine = user-level (~/.claude/skills/)
+    + installed plugins' skills (installed_plugins.json → each installPath/skills/*).
+
+    A skill not in this set can't be invoked at all, so 'unused' is only meaningful
+    relative to this set — never against the whole marketplace catalog.
+    """
+    base = Path(home or os.path.expanduser("~")) / ".claude"
+    names = set()
+
+    user_skills = base / "skills"
+    if user_skills.exists():
+        for d in user_skills.iterdir():
+            if (d / "SKILL.md").exists():
+                names.add(d.name)
+
+    installed = base / "plugins" / "installed_plugins.json"
+    try:
+        data = json.loads(installed.read_text(encoding="utf-8"))
+        for entries in (data.get("plugins") or {}).values():
+            for e in entries:
+                skills_dir = Path(e.get("installPath", "")) / "skills"
+                if skills_dir.exists():
+                    for d in skills_dir.iterdir():
+                        if (d / "SKILL.md").exists():
+                            names.add(d.name)
+    except Exception:
+        pass
+
+    return sorted(names)
 
 
 def render_report(projects_dir: Optional[Path] = None, days: int = 7,
@@ -132,6 +164,6 @@ def render_report(projects_dir: Optional[Path] = None, days: int = 7,
         used = {s for s in tot} | {s.split(":")[-1] for s in tot}
         unused = [s for s in known_skills if s not in used]
         if unused:
-            lines += ["", f"Installed but unused (last {days}d): " + ", ".join(unused)]
+            lines += ["", f"Available but not triggered (last {days}d): " + ", ".join(unused)]
 
     return "\n".join(lines) + "\n"

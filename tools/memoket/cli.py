@@ -215,7 +215,7 @@ def cmd_usage(args) -> int:
     from memoket import usage
 
     try:
-        known = usage.curated_skill_names()
+        known = usage.available_skill_names()
     except Exception:
         known = None
     text = usage.render_report(days=args.days, known_skills=known)

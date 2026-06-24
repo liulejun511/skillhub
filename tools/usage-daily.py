@@ -48,7 +48,7 @@ def main() -> None:
 
         days = int(os.environ.get("SKILLHUB_USAGE_DAYS", "7"))
         try:
-            known = usage.curated_skill_names()
+            known = usage.available_skill_names()
         except Exception:
             known = None
         text = usage.render_report(days=days, known_skills=known)
