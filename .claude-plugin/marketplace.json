@@ -86,6 +86,54 @@
       "version": "0.1.0",
       "category": "engineering",
       "keywords": []
+    },
+    {
+      "name": "test-driven-development",
+      "source": "./plugins/test-driven-development",
+      "description": "Use when implementing any feature or bugfix, before writing implementation code",
+      "version": "0.1.0",
+      "category": "engineering",
+      "keywords": [
+        "testing",
+        "tdd",
+        "discipline"
+      ]
+    },
+    {
+      "name": "verification-before-completion",
+      "source": "./plugins/verification-before-completion",
+      "description": "Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always",
+      "version": "0.1.0",
+      "category": "engineering",
+      "keywords": [
+        "verification",
+        "discipline",
+        "quality"
+      ]
+    },
+    {
+      "name": "using-git-worktrees",
+      "source": "./plugins/using-git-worktrees",
+      "description": "Use when starting feature work that needs isolation from current workspace or before executing implementation plans - ensures an isolated workspace exists via native tools or git worktree fallback",
+      "version": "0.1.0",
+      "category": "engineering",
+      "keywords": [
+        "git",
+        "worktree",
+        "workflow"
+      ]
+    },
+    {
+      "name": "owasp-security",
+      "source": "./plugins/owasp-security",
+      "description": "Use when reviewing code for security vulnerabilities, implementing authentication/authorization, handling user input, or discussing web application security. Covers OWASP Top 10:2025, ASVS 5.0, LLM Top 10 (2025), and Agentic AI security (2026).",
+      "version": "0.1.0",
+      "category": "engineering",
+      "keywords": [
+        "security",
+        "owasp",
+        "code-review"
+      ]
     }
   ]
 }

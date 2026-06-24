@@ -1,0 +1,10 @@
+{
+  "name": "test-driven-development",
+  "version": "0.1.0",
+  "description": "Use when implementing any feature or bugfix, before writing implementation code",
+  "keywords": [
+    "testing",
+    "tdd",
+    "discipline"
+  ]
+}

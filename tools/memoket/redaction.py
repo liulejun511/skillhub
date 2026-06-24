@@ -25,6 +25,10 @@ _DEFAULT_URL_ALLOWLIST = {
     "code.claude.com", "docs.claude.com", "claude.com",
     "docs.anthropic.com", "anthropic.com",
     "modelcontextprotocol.io",
+    # 公开代码/文档站：公开技能正文与 vendored 出处链接合法引用这些，不算泄露。
+    # 抓内部泄露的 branch_ref(origin/<分支>) 与 repo_path(tools/x.py) 规则不受影响。
+    "github.com", "raw.githubusercontent.com", "github.io",
+    "owasp.org",
 }
 _HOST_RE = re.compile(r"https?://([^/\s:]+)", re.IGNORECASE)
 
