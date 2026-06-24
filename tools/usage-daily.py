@@ -6,8 +6,9 @@ invocations over the last N days, prints the report, and pushes it to Feishu if
 the FEISHU_* env vars are set (otherwise just prints — never errors on missing creds).
 
 Env:
-  FEISHU_APP_ID, FEISHU_APP_SECRET, FEISHU_TO_EMAIL   (push target; optional)
-  SKILLHUB_USAGE_DAYS                                  (window, default 7)
+  FEISHU_TO_EMAIL     recipient (your Feishu email) — required to push
+  FEISHU_APP_ID/SECRET  app creds; if unset, auto-reused from a configured lark MCP
+  SKILLHUB_USAGE_DAYS   window, default 7
 
 Schedule (Windows Task Scheduler — runs LOCALLY, since the transcripts are local):
   schtasks /create /tn skillhub-usage /sc daily /st 09:00 ^

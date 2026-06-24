@@ -62,7 +62,7 @@ Installed but unused (last 7d): evidence-before-adoption, pr-description-craft, 
 
 > Claude 云端定时(routine/cron)**读不到本地 transcript**,所以必须用**本地**调度。
 
-1. 设飞书凭据(用户级环境变量,持久):`FEISHU_APP_ID` / `FEISHU_APP_SECRET` / `FEISHU_TO_EMAIL`(你的邮箱)。可选 `SKILLHUB_USAGE_DAYS`(默认 7)。
+1. 收件人:设 `FEISHU_TO_EMAIL`(你的飞书邮箱)。**App 凭据**优先读 `FEISHU_APP_ID/SECRET` env;读不到则**自动复用已配置的 lark/feishu MCP 的 `-a`/`-s`**(`~/.claude.json`)——已连飞书机器人的话啥都不用填。可选 `SKILLHUB_USAGE_DAYS`(默认 7)。
 2. 建每日任务(Windows):
    ```
    schtasks /create /tn skillhub-usage /sc daily /st 09:00 ^
