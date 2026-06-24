@@ -63,12 +63,13 @@ Installed but unused (last 7d): evidence-before-adoption, pr-description-craft, 
 > Claude 云端定时(routine/cron)**读不到本地 transcript**,所以必须用**本地**调度。
 
 1. 收件人:设 `FEISHU_TO_EMAIL`(你的飞书邮箱)。**App 凭据**优先读 `FEISHU_APP_ID/SECRET` env;读不到则**自动复用已配置的 lark/feishu MCP 的 `-a`/`-s`**(`~/.claude.json`)——已连飞书机器人的话啥都不用填。可选 `SKILLHUB_USAGE_DAYS`(默认 7)。
-2. 建每日任务(Windows):
+2. 建每日任务(Windows,跑 **`usage-daily.cmd` 包装器**——给 python 一个控制台,否则无控制台下 urllib 发送会被 `0xC000013A` 干掉):
+   ```powershell
+   Register-ScheduledTask -TaskName skillhub-usage -Force `
+     -Action (New-ScheduledTaskAction -Execute cmd.exe -Argument '/c "D:\capsoul\skillhub\tools\usage-daily.cmd"') `
+     -Trigger (New-ScheduledTaskTrigger -Daily -At 9:00am)
    ```
-   schtasks /create /tn skillhub-usage /sc daily /st 09:00 ^
-     /tr "python \"D:\capsoul\skillhub\tools\usage-daily.py\""
-   ```
-   (macOS/Linux:`0 9 * * * python /path/to/tools/usage-daily.py`)
+   日志写在 `.work/usage-daily.log`(gitignored)。(macOS/Linux:`0 9 * * * python /path/to/tools/usage-daily.py`,有控制台无此坑。)
 3. 没配飞书也行——runner 会把报告打印出来(任务计划里可重定向到日志文件)。
 
 ## 注意 / Caveats
