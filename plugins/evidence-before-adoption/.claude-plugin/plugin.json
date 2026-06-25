@@ -1,7 +1,14 @@
 {
   "name": "evidence-before-adoption",
   "version": "0.2.0",
-  "description": "接受一个改动/性能主张/自动化汇报前，先要真实数据证据（EXPLAIN/计时/复现），并审「谁做了什么」。Demand real evidence before accepting a change, perf claim, or automation report.",
-  "author": { "name": "liulejun", "email": "lejun.liu@memoket.ai" },
-  "keywords": ["verification", "performance", "discipline"]
+  "description": "用于在接受/合并一个改动、性能主张或自动化（AI/同事）工作汇报之前，强制先拿真实数据证据再放行：自己跑 EXPLAIN ANALYZE、重复计时取样、前后行数对账、原始触发路径复现，并审「到底谁真跑了什么、是端到端跑通还是只跑了一段」。触发场景：有人说「更快了/修好了/自动化跑通了」要你信；回归取证（以前好的现在坏了、A/B 复现、时间线锚定变更窗口）；判断证据是否可证伪、环境/分支对不对。Use when deciding whether to trust or merge a change, a perf claim, or an automation report before there is real evidence.",
+  "author": {
+    "name": "liulejun",
+    "email": "lejun.liu@memoket.ai"
+  },
+  "keywords": [
+    "verification",
+    "performance",
+    "discipline"
+  ]
 }
