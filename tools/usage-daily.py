@@ -49,9 +49,10 @@ def main() -> None:
         days = int(os.environ.get("SKILLHUB_USAGE_DAYS", "7"))
         try:
             known = usage.available_skill_names()
+            resident = usage.resident_skill_names()
         except Exception:
-            known = None
-        text = usage.render_report(days=days, known_skills=known)
+            known = resident = None
+        text = usage.render_report(days=days, known_skills=known, resident_skills=resident)
         ok, detail = notify_feishu(text)
         _log(f"run ok days={days} feishu={'sent' if ok else 'skipped'} ({detail})")
         try:

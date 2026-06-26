@@ -216,9 +216,10 @@ def cmd_usage(args) -> int:
 
     try:
         known = usage.available_skill_names()
+        resident = usage.resident_skill_names()
     except Exception:
-        known = None
-    text = usage.render_report(days=args.days, known_skills=known)
+        known = resident = None
+    text = usage.render_report(days=args.days, known_skills=known, resident_skills=resident)
     print(text)
     if args.feishu:
         from memoket.notify import notify_feishu

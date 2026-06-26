@@ -71,7 +71,44 @@ def test_render_report_mentions_skills():
 def test_empty_when_no_transcripts():
     with _projects([]) as root:
         assert usage.counts_by_day(root) == {}
-        assert "No skill invocations" in usage.render_report(root)
+        assert "No activity recorded" in usage.render_report(root)
+
+
+def test_activity_counts_all_tool_use_deduped():
+    lines = [
+        _entry("u1", _ts(0), "foo"),         # a Skill tool_use
+        _entry("u2", _ts(0), tool="Read"),   # a non-skill tool_use — still activity
+        _entry("u1", _ts(0), "foo"),          # duplicate uuid (resumed transcript) → ignored
+    ]
+    with _projects(lines) as root:
+        act = usage.activity_by_day(root, days=7)
+        assert sum(act.values()) == 2, act    # u1 + u2, dup u1 not double-counted
+
+
+def test_resident_split_in_report():
+    # an always-on skill in the not-triggered list is labelled resident, not idle
+    lines = [_entry("u1", _ts(0), "foo")]
+    with _projects(lines) as root:
+        text = usage.render_report(root, days=7, known_skills=["foo", "guardrails"],
+                                   resident_skills=["guardrails"])
+        assert "resident/discipline" in text
+        assert "guardrails" in text.split("resident/discipline")[1]
+
+
+def test_resident_detected_by_description_marker():
+    home = Path(tempfile.mkdtemp())
+    try:
+        (home / ".claude" / "skills" / "always").mkdir(parents=True)
+        (home / ".claude" / "skills" / "always" / "SKILL.md").write_text(
+            "---\nname: always\ndescription: Use when writing or changing ANY code\n---\nbody",
+            encoding="utf-8")
+        (home / ".claude" / "skills" / "discrete").mkdir(parents=True)
+        (home / ".claude" / "skills" / "discrete" / "SKILL.md").write_text(
+            "---\nname: discrete\ndescription: Use when running psql to debug a slow query\n---\nbody",
+            encoding="utf-8")
+        assert usage.resident_skill_names(home=home) == ["always"]
+    finally:
+        shutil.rmtree(home, ignore_errors=True)
 
 
 def test_available_skill_names_user_and_plugins():
